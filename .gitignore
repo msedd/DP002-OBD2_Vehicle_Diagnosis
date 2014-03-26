@@ -11,3 +11,7 @@
 *.lai
 *.la
 *.a
+
+.DS_Store
+*/.DS_Store
+*-Storyboard.ppt
