@@ -8,10 +8,15 @@
  
 */
 
+#include <Arduino.h>
 #include <LiquidCrystal.h>
+#include <OBD.h>
 
 
-LiquidCrystal* lcd ;
+// OBD-II UART Adapter
+COBD obd;
+
+LiquidCrystal* lcd;
 enum BtnKey {btnRIGHT, btnUP, btnDOWN, btnLEFT, btnSELECT, btnNONE};
 int oldkey = btnNONE;
 
@@ -23,8 +28,29 @@ void setup() {
   lcd->setCursor(0, 0);
   lcd->print("DP002:");
   lcd->setCursor(0, 1);
-  lcd->print("Vehicle Diagnosis");
+  lcd->print("Vehicle Diagn.");
+  
+   delay(1000);
 
+  // starte Kommunikation mit dem OBD-II Adapter
+  lcd->clear();
+  lcd->setCursor(0, 1);
+  lcd->print("Start connection...");
+  
+  obd.begin();
+  while (!obd.init()){
+    lcd->clear();
+    lcd->setCursor(0, 0);
+    lcd->print("init obd2 failed!");
+    lcd->setCursor(0, 1);
+    lcd->print("try again...");
+    //delay(1000);
+  }
+  lcd->clear();
+  lcd->setCursor(0, 0);
+  lcd->print("init obd2 succeed");
+  lcd->setCursor(0, 1);
+  lcd->print("start diagnosis");
 
 }
 
