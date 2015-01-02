@@ -10,8 +10,9 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
+#include <OBD.h>
 
-
+COBD obd;
 
 LiquidCrystal* lcd;
 
@@ -30,6 +31,13 @@ void setup() {
   updateDisplay("DP002:","Vehicle Diagn.");
 
   delay(1000);
+  
+  updateDisplay("","Start connection...");
+  obd.begin();
+  while (!obd.init()){
+    updateDisplay("init obd2 failed!","try again...");
+  }
+  updateDisplay("init obd2 succeed","start diagnosis");
 }
 
 void loop() {
