@@ -42,8 +42,13 @@ void setup() {
 
 void loop() {
   
-   String strStandard = getOBDStandard();
-   updateDisplay("OBD Standard",strStandard);
+   //String strStandard = getOBDStandard();
+   //updateDisplay("OBD Standard",strStandard);
+   
+   // PID_FUEL_LEVEL 0x2F
+   int value = 0;
+   obd.read(PID_FUEL_LEVEL, value);
+   updateDisplay("Fuel level",String(value));
 
   
 }
