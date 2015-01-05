@@ -51,11 +51,11 @@ void loop() {
    //obd.read(PID_FUEL_LEVEL, value);
    //updateDisplay("Fuel level",String(value));
    
-   obd.read(0x20, value);
-   String val0x20 = String(value, BIN);
+   obd.read(0x00, value);
+   String val0x20 = String(value, HEX);
    
-   obd.read(0x40, value);
-   String val0x40 = String(value, BIN);
+   obd.read(0x20, value);
+   String val0x40 = String(value, HEX);
    
    updateDisplay(val0x20,val0x40);
 
