@@ -11,6 +11,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 #include <OBD.h>
+#include <Wire.h>
 
 COBD obd;
 
@@ -47,8 +48,16 @@ void loop() {
    
    // PID_FUEL_LEVEL 0x2F
    int value = 0;
-   obd.read(PID_FUEL_LEVEL, value);
-   updateDisplay("Fuel level",String(value));
+   //obd.read(PID_FUEL_LEVEL, value);
+   //updateDisplay("Fuel level",String(value));
+   
+   obd.read(0x20, value);
+   String val0x20 = String(value, BIN);
+   
+   obd.read(0x40, value);
+   String val0x40 = String(value, BIN);
+   
+   updateDisplay(val0x20,val0x40);
 
   
 }
