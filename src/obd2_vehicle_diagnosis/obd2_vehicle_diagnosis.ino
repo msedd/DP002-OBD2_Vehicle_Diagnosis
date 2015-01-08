@@ -1,3 +1,4 @@
+
 /*
   Developer Podcast 
  Folge: DP002-OBD2_Vehicle_Diagnosis
@@ -32,34 +33,46 @@ void setup() {
   updateDisplay("DP002:","Vehicle Diagn.");
 
   delay(1000);
-  
-  updateDisplay("","Start connection...");
+
+  updateDisplay("Starting","try to connect...");
   obd.begin();
   while (!obd.init()){
     updateDisplay("init obd2 failed!","try again...");
   }
-  updateDisplay("init obd2 succeed","start diagnosis");
+  updateDisplay("...successfully",getOBDStandard());
+  delay(1000);
+
+  String buffer;
+  int value = 0;
+  for(int i = 0; i < 4; i++){
+    obd.read(0x20*i, value);
+    buffer += String(value, HEX);
+    buffer += " ";
+  }
+
+  updateDisplay("Supported PID",buffer);
+
+  delay(3000);
 }
 
 void loop() {
-  
-   //String strStandard = getOBDStandard();
-   //updateDisplay("OBD Standard",strStandard);
-   
-   // PID_FUEL_LEVEL 0x2F
-   int value = 0;
-   //obd.read(PID_FUEL_LEVEL, value);
-   //updateDisplay("Fuel level",String(value));
-   
-   obd.read(0x00, value);
-   String val0x20 = String(value, HEX);
-   
-   obd.read(0x20, value);
-   String val0x40 = String(value, HEX);
-   
-   updateDisplay(val0x20,val0x40);
 
-  
+
+  // PID_FUEL_LEVEL 0x2F
+  int value = 0;
+  //obd.read(PID_FUEL_LEVEL, value);
+  //updateDisplay("Fuel level", String(value));
+
+  // PID_SPEED 0x0D
+  obd.read(PID_SPEED, value);
+  String speed = String(value);
+  // PID_RPM 0x0C
+  obd.read(PID_RPM, value);
+  String rpm = String(value);
+  updateDisplay("Speed: "+speed +" km/h", "RPM: "+rpm + " rpm" );
+
+  delay(1000);
+
 }
 String getOBDStandard(){
 
@@ -180,5 +193,6 @@ String getOBDStandard(){
   return strStandard;
 
 }
+
 
 
