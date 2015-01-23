@@ -40,23 +40,11 @@ void setup() {
     updateDisplay("init obd2 failed!","try again...");
   }
   updateDisplay("...successfully",getOBDStandard());
-  delay(1000);
+  delay(2000);
 
-  String buffer;
-  int value = 0;
-  for(int i = 0; i < 4; i++){
-    obd.read(0x20*i, value);
-    buffer += String(value, HEX);
-    buffer += " ";
-  }
-
-  updateDisplay("Supported PID",buffer);
-
-  delay(3000);
 }
 
 void loop() {
-
 
   // PID_FUEL_LEVEL 0x2F
   int value = 0;
@@ -69,7 +57,7 @@ void loop() {
   // PID_RPM 0x0C
   obd.read(PID_RPM, value);
   String rpm = String(value);
-  updateDisplay("Speed: "+speed +" km/h", "RPM: "+rpm + " rpm" );
+  updateDisplay("Speed: "+speed +" km/h", "RPM: "+rpm + " 1/Min" );
 
   delay(1000);
 
