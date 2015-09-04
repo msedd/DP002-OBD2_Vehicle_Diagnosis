@@ -11,14 +11,16 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
+
 #include <OBD.h>
 #include <Wire.h>
 
-COBD obd;
 
 LiquidCrystal* lcd;
+COBD obd;
 
 void updateDisplay(String str1, String str2){
+  lcd->begin(16,2);
   lcd->clear();
   lcd->setCursor(0, 0);
   lcd->print(str1);
@@ -28,40 +30,32 @@ void updateDisplay(String str1, String str2){
 
 void setup() {
   lcd = new LiquidCrystal(8, 9, 4, 5, 6, 7);
-  lcd->clear();
-  lcd->begin(16, 2);
-  updateDisplay("DP002:","Vehicle Diagn.");
+
+  updateDisplay("start obd","");
 
   delay(1000);
-
-  updateDisplay("Starting","try to connect...");
   obd.begin();
   while (!obd.init()){
-    updateDisplay("init obd2 failed!","try again...");
+    updateDisplay("error","try again...");
+
   }
-  updateDisplay("...successfully",getOBDStandard());
-  delay(2000);
+  updateDisplay("success",getOBDStandard());
 
 }
 
 void loop() {
-
-  // PID_FUEL_LEVEL 0x2F
+  delay(1000);
   int value = 0;
-  //obd.read(PID_FUEL_LEVEL, value);
-  //updateDisplay("Fuel level", String(value));
-
-  // PID_SPEED 0x0D
   obd.read(PID_SPEED, value);
   String speed = String(value);
-  // PID_RPM 0x0C
-  obd.read(PID_RPM, value);
+  obd.read(PID_RPM,value);
   String rpm = String(value);
-  updateDisplay("Speed: "+speed +" km/h", "RPM: "+rpm + " 1/Min" );
+  updateDisplay("Speed:"+speed+" km/h", "RPM:"+rpm+"r/min");
 
-  delay(1000);
+
 
 }
+
 String getOBDStandard(){
 
   int standard = 0;
@@ -181,6 +175,5 @@ String getOBDStandard(){
   return strStandard;
 
 }
-
 
 
